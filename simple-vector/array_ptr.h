@@ -20,19 +20,16 @@ public:
     {
     }
 
-    ArrayPtr(const ArrayPtr&) = delete;
-
-    ~ArrayPtr() {
-        delete[] raw_ptr_;
+    ArrayPtr(ArrayPtr&& other) noexcept {
+        raw_ptr_ = other.raw_ptr_;
+        other.raw_ptr_ = nullptr;
     }
 
-
-    ArrayPtr& operator=(const ArrayPtr&) = delete;
-
-    [[nodiscard]] Type* Release() noexcept {
-        Type* tmp = raw_ptr_;
-        raw_ptr_ = nullptr;
-        return tmp;
+    ArrayPtr& operator=(ArrayPtr&& other) noexcept {
+        if (this != &other) {
+            std::swap(raw_ptr_, other.raw_ptr_);
+        }
+        return *this;
     }
 
     Type& operator[](size_t index) noexcept {
@@ -57,5 +54,5 @@ public:
     }
 
 private:
-    Type* raw_ptr_ = nullptr;
+   Type* raw_ptr_ = nullptr;
 };
