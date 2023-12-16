@@ -74,13 +74,17 @@ public:
         return *this;
     }
 
-    Type& operator[](size_t index) noexcept {
-        return items_[index];
-    }
+    Type& operator[](size_t index) noexcept { 
+        assert(index < size_);
+        return items_[index]; 
+}
 
-    const Type& operator[](size_t index) const noexcept {
-        return items_[index];
-    }
+
+    const Type& operator[](size_t index) const noexcept { 
+        assert(index < size_);
+        return items_[index]; 
+}
+
 
     Type& At(size_t index) {
         if (index >= size_) throw std::out_of_range("Out of range");
@@ -259,8 +263,9 @@ public:
         if (items_) --size_;
     }
 
-    Iterator Erase(ConstIterator pos) {
+    Iterator Erase(ConstIterator pos) { 
         assert(pos != this->end());
+        assert(pos >= begin() && pos < end());
 
         size_t count = pos - items_.Get();
         std::move(items_.Get() + count + 1, items_.Get() + size_, items_.Get() + count);
